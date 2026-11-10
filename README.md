@@ -99,13 +99,21 @@ This produces `data/diabetic_data.csv` (~19 MB) and `data/IDS_mapping.csv`.
 5. **Deep learning**: MLP on one-hot features.
 6. **Ensemble**: validation-tuned blend of XGBoost and CatBoost.
 
+All metrics below are at a fixed 0.5 probability threshold, from the patient-level-CI run
+([`5_results/main_models/model_comparison_patient_ci.csv`](5_results/main_models/model_comparison_patient_ci.csv)),
+matching the manuscript's Table I. (An earlier, slightly different XGBoost refit in
+[`5_results/main_models/model_comparison.csv`](5_results/main_models/model_comparison.csv) gave
+AUROC 0.672 / accuracy 0.682 / sensitivity 0.539 / specificity 0.700 — within normal run-to-run
+variance for an independently retrained model, not a threshold difference, but superseded by the
+numbers below for consistency with the manuscript.)
+
 | Model | AUROC | AUPRC | Accuracy | Sensitivity | Specificity |
 |---|---|---|---|---|---|
 | Baseline (majority-class) | 0.500 | 0.111 | 0.889 | 0.000 | 1.000 |
 | Logistic Regression | 0.668 | 0.214 | 0.670 | 0.547 | 0.685 |
-| XGBoost | 0.672 | 0.226 | 0.682 | 0.539 | 0.700 |
+| XGBoost | 0.673 | 0.224 | 0.673 | 0.561 | 0.687 |
 | MLP | 0.668 | 0.222 | 0.616 | 0.617 | 0.616 |
-| CatBoost | 0.677 | 0.228 | 0.671 | 0.555 | 0.685 |
+| CatBoost | 0.676 | 0.227 | 0.672 | 0.555 | 0.686 |
 | Ensemble | 0.676 | 0.228 | 0.674 | 0.560 | 0.688 |
 
 95% CI on the best models is roughly +/-0.015; the models are statistically close.

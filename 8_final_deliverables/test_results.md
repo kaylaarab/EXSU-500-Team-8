@@ -56,6 +56,10 @@ commit for the data itself, and the old (drifted) files were kept as a
 backup in `data/_backup_pre_rerun_20261110/` (also git-ignored) in case
 anyone needs to compare.
 
+## Downstream catch (2026-11-10)
+
+This suite's fix (rerunning `scripts/01_preprocess.py`) was necessary but not sufficient: a two-reviewer audit of the final deliverables found that `scripts/22_stacking_and_wider_search.py` had been run on 2026-11-09, on the drifted data, *before* this suite caught and fixed the drift — and its already-logged "new best model" result (AUROC 0.679, stacking + wider search, reported as a significant gain) was never rerun afterward. Rerunning it on the corrected cohort found the gain **does not replicate** (both changes land at AUROC 0.677, not significant over plain CatBoost). This has been corrected throughout the repo (`manuscript_draft.md`, `MODEL_CARD.md`, `PROJECT_STATUS.md`, `progress_log.md`, `5_results/model_variations_log.md`). Lesson for next time: when a reproducibility test like this one finds and fixes a data drift, also re-check any analysis script logged around the same time, not just the ones that triggered the test.
+
 ## Files in this folder
 - `test_pipeline_integrity.py` — the pipeline/model integrity suite.
 - `test_results.md` — this file.

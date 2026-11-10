@@ -10,7 +10,7 @@ Kayla Arab, Siham Khaldoun, Magalie Achim, Larissa Chiu — Faculty of Medicine 
 
 ## Abstract (target ≤250 words)
 
-Hospital readmission within 30 days is a costly, common outcome for patients with diabetes. We built and compared statistical and machine-learning models to predict 30-day readmission from routinely collected clinical data, with an emphasis on leak-free evaluation and honest uncertainty quantification — concerns we found under-addressed in several published benchmarks on this exact dataset. Using the UCI Diabetes 130-US Hospitals dataset (99,343 encounters, 69,990 patients, 11.4% readmitted within 30 days, after excluding death/hospice discharges), we split by patient into training, validation and test sets to prevent leakage, and compared a majority-class baseline, logistic regression, XGBoost, CatBoost, a multilayer perceptron, a weighted ensemble, and — after the midterm stage — a stacked meta-learner and a more extensively tuned CatBoost. The best model (stacked meta-learner) reached AUROC 0.679 (95% patient-level bootstrap CI 0.663–0.695), a small but statistically significant improvement over a single CatBoost model (0.674), itself consistent with the 0.65–0.70 AUROC range reported across every credible published approach to this dataset we reviewed. Calibration was good (Brier score 0.094, expected calibration error 0.007). A SHAP-based interpretability analysis and a calibration/decision-curve analysis support the model's potential clinical usefulness as a triage aid, not a diagnostic tool. A patient-level bootstrap subgroup audit found sensitivity significantly higher for women than men (0.622 vs. 0.519, non-overlapping 95% CIs) at the model's operating threshold, a finding requiring ethical review before any deployment decision. We also reproduce, as a cautionary methodological case study, how an unrelated evaluation artifact (synthetic oversampling applied before cross-validation) can manufacture an AUROC of 0.96 on this same data — nearly matching a 0.974 claim in the literature — underscoring that evaluation protocol, not model sophistication, is the dominant lever on reported performance for this problem.
+Hospital readmission within 30 days is a costly, common outcome for patients with diabetes. We built and compared statistical and machine-learning models to predict 30-day readmission from routine clinical data, emphasizing leak-free evaluation and honest uncertainty quantification — concerns under-addressed in several published benchmarks on this dataset. Using the UCI Diabetes 130-US Hospitals dataset (99,343 encounters, 69,990 patients, 11.4% readmitted within 30 days, after excluding death/hospice discharges), we split by patient to prevent leakage and compared a majority-class baseline, logistic regression, XGBoost, CatBoost, a multilayer perceptron, an ensemble, and — after the midterm stage — a stacked meta-learner and a more extensively tuned CatBoost. The best model (CatBoost) reached AUROC 0.677 (95% patient-level bootstrap CI 0.660–0.693), consistent with every credible published approach to this dataset; the post-midterm refinements did not significantly improve on it (paired CIs cross zero). Calibration was good (Brier score 0.094, ECE 0.007), and SHAP and decision-curve analyses support the model's use as a triage aid, not a diagnostic tool. A patient-level subgroup audit found sensitivity significantly higher for women than men (0.622 vs. 0.519, non-overlapping CIs), requiring ethical review before deployment. We also reproduce, as a cautionary case study, how oversampling applied before cross-validation can manufacture an AUROC of 0.96 on this data — nearly matching a 0.974 literature claim — showing that evaluation protocol, not model sophistication, is the dominant lever on reported performance here.
 
 ## I. Introduction and Clinical Significance
 
@@ -22,7 +22,7 @@ Machine-learning approaches to this problem have shown both promise and pitfalls
 
 Prior studies identify consistent predictors of 30-day readmission in diabetes: age, sex, race, prior inpatient/outpatient/emergency visits, comorbidity burden, admission type, length of stay, discharge disposition, procedure and lab counts, and diabetes-medication use and dosage changes [4]–[7]. Glycemic markers — HbA1c and serum glucose testing — have also been studied as indicators of diabetes management quality [5], [7].
 
-Modeling approaches on the UCI Diabetes 130-US Hospitals dataset [7] span logistic regression, random forests, XGBoost, and deep neural networks [4]–[6]. Emi-Johnson and Nkrumah [4] report AUROC 0.667 (XGBoost), 0.642 (logistic regression) and 0.579 (DNN) on a stratified 80/20 split; we verified against their full text that their reported 0.84–0.89 "recall" in Table 1 does not reconcile with Table 2's class-1 recall of 0.017–0.143, and that their 0.89 accuracy equals the always-"no" baseline at this dataset's prevalence — a reminder that accuracy and headline "recall" figures can mask near-zero sensitivity to the minority (readmitted) class in imbalanced clinical prediction tasks [16]. Tan et al. [3] report an external AUROC of 0.633–0.671 for logistic regression in elderly Type 2 diabetes patients, decreasing from 0.769 measured internally — evidence that performance on this task degrades under distribution shift even within the same broad modeling approach.
+Modeling approaches on the UCI Diabetes 130-US Hospitals dataset [7] span logistic regression, random forests, XGBoost, and deep neural networks [4]–[6]. Emi-Johnson and Nkrumah [4] report AUROC 0.667 (XGBoost), 0.642 (logistic regression) and 0.579 (DNN) on a stratified 80/20 split; we verified against their full text that their reported 0.84–0.89 "recall" in Table 1 does not reconcile with Table 2's class-1 recall of 0.002–0.143 (LogReg 0.016, random forest 0.002, XGBoost 0.017, DNN 0.143), and that their 0.89 accuracy equals the always-"no" baseline at this dataset's prevalence — a reminder that accuracy and headline "recall" figures can mask near-zero sensitivity to the minority (readmitted) class in imbalanced clinical prediction tasks [16]. Tan et al. [3] report an external AUROC of 0.633–0.671 for logistic regression in elderly Type 2 diabetes patients, decreasing from 0.769 measured internally — evidence that performance on this task degrades under distribution shift even within the same broad modeling approach.
 
 An outlier in the literature is EmbPred30 [20], which reports AUROC 0.974 and accuracy 95.2% using categorical embeddings. We obtained and read the full text: its preprocessing pipeline lists SMOTE oversampling to a 1:1 class ratio as a step prior to 6-fold cross-validation, with no statement that oversampling was confined to training folds, and feature selection by importance after training, also undescribed as fold-restricted. Both are recognized sources of evaluation leakage [16]. We treat this as a cautionary result rather than a performance target (Section V-D).
 
@@ -60,12 +60,14 @@ Table I reports test-set performance for all headline models, with patient-level
 | CatBoost | 0.676 (0.660–0.692) | 0.227 | 0.672 | 0.555 | 0.686 |
 | Ensemble (fixed-weight blend) | 0.676 (0.660–0.692) | 0.228 | 0.674 | 0.560 | 0.688 |
 | MLP | 0.668 (0.652–0.686) | 0.222 | 0.616 | 0.617 | 0.616 |
-| **Stacked meta-learner** (post-midterm) | 0.679 (0.663–0.695) | 0.230 | 0.584 | 0.681 | 0.572 |
-| **CatBoost, wider search** (post-midterm) | 0.679 (0.664–0.695) | 0.230 | 0.589 | 0.676 | 0.578 |
+| Stacked meta-learner (post-midterm)* | 0.677 (0.661–0.694) | 0.230 | 0.699 | 0.524 | 0.721 |
+| CatBoost, wider search (post-midterm)* | 0.677 (0.660–0.694) | 0.229 | 0.669 | 0.563 | 0.683 |
+
+*Accuracy/sensitivity/specificity for the five original candidates use a fixed 0.5 threshold; the two post-midterm rows instead use the Youden (max sensitivity+specificity−1) threshold from the validation ROC curve, matching the operating-threshold convention used for the deployed model. AUROC/AUPRC, the comparison this paper's conclusions rest on, are threshold-independent and directly comparable across all seven rows; accuracy/sensitivity/specificity across the dashed line above are not. **Neither post-midterm row is a statistically significant improvement over plain CatBoost** — see Section V-B.
 
 ### B. Beyond the midterm model
 
-After the midterm, we tested two further levers. First, a true stacked meta-learner — a logistic regression trained on the three base models' validation-set predictions, rather than the fixed blend weights used for the ensemble row above — reached AUROC 0.679, a gain of +0.0051 over a freshly-fit CatBoost reference evaluated in the same run with an identical paired bootstrap (95% CI on the difference: +0.0016 to +0.0088, excluding zero). Second, a 30-draw random search over CatBoost's depth, learning rate, L2 regularization, and bagging temperature (versus a 9-combination grid used for the midterm model) found a configuration (depth 6, learning rate 0.050, L2 30.8, bagging temperature 1.59) reaching AUROC 0.679, a paired gain of +0.0053 (95% CI +0.0021 to +0.0090). Both gains are small but statistically distinguishable from zero — in contrast to every other modeling change tried (Section V-D), which did not clear this bar. We treat this as confirmation of, rather than a break from, the ~0.68 ceiling discussed next, and report it transparently alongside the larger comparison rather than presenting only the best-looking number.
+After the midterm, we tested two further levers. First, a true stacked meta-learner — a logistic regression trained on the three base models' validation-set predictions, rather than the fixed blend weights used for the ensemble row above. Second, a 30-draw random search over CatBoost's depth, learning rate, L2 regularization, and bagging temperature (versus a 9-combination grid used for the midterm model). An initial run (2026-11-09) reported both as small, statistically significant gains over a freshly-fit CatBoost reference; a subsequent automated test (`8_final_deliverables/test_pipeline_integrity.py`) caught that this run had used a local `data/*.csv` that had drifted from the documented, cleaned cohort (it held 15,219 rows including death/hospice discharges, rather than the correct 14,913), so the result was discarded and the experiment rerun on the corrected data. On the corrected cohort, the stacked meta-learner reached AUROC 0.677, a paired gain of only +0.0016 over the same-run CatBoost reference (95% CI −0.0011 to +0.0042, crossing zero), and the best configuration from the wider search (depth 4, learning rate 0.168, L2 4.0, bagging temperature 1.48) reached AUROC 0.677, a paired gain of +0.0011 (95% CI −0.0024 to +0.0046, also crossing zero). **Neither gain is statistically significant** — unlike every other modeling change tried (Section V-D), none of which cleared this bar either. We report both the initial, since-corrected result and this honest null finding transparently, as a reminder that an automated data-integrity check, not just model evaluation, is part of a trustworthy pipeline.
 
 ### C. Is there a ceiling, and is it information or modeling?
 
@@ -89,7 +91,7 @@ At the model's operating threshold (11.6% predicted risk), sensitivity is signif
 
 ### A. What the evidence supports
 
-Across model families, honest (leak-free, patient-level) evaluation on this dataset consistently lands in the 0.65–0.70 AUROC range, matching the credible subset of the published literature we reviewed [3], [4], [21], [22] and roughly 0.10 AUROC above a standard clinical risk score (LACE [not yet validated here against the original index's external cohorts], 0.575 alone). Machine learning adds real but modest value over a simple clinical heuristic; model family choice within "reasonable" options (logistic regression through gradient boosting to deep tabular networks) adds comparatively little once data handling (categorical encoding, retained administrative fields, patient-history features) is done carefully. This is consistent with, and adds a reproducible local case study to, the broader finding that tree-based models remain strong baselines for tabular clinical data [19].
+Across model families, honest (leak-free, patient-level) evaluation on this dataset consistently lands in the 0.65–0.70 AUROC range, matching the credible subset of the published literature we reviewed [3], [4], [21], [22] and roughly 0.10 AUROC above a standard clinical risk score (LACE alone, AUROC 0.575; we did not validate LACE against its original index's external cohorts, so this comparison is indicative, not a formal benchmark). Machine learning adds real but modest value over a simple clinical heuristic; model family choice within "reasonable" options (logistic regression through gradient boosting to deep tabular networks) adds comparatively little once data handling (categorical encoding, retained administrative fields, patient-history features) is done carefully. This is consistent with, and adds a reproducible local case study to, the broader finding that tree-based models remain strong baselines for tabular clinical data [19].
 
 ### B. A methodological case study: how 0.68 becomes 0.97
 
@@ -111,7 +113,7 @@ The resulting model and accompanying interface are a research/teaching prototype
 
 ## VII. Conclusion
 
-We built and rigorously evaluated several models for 30-day readmission prediction in diabetic inpatients, with particular attention to patient-level evaluation, honest uncertainty quantification, calibration, interpretability, and subgroup fairness — areas we found inconsistently handled across the comparable published literature on this exact dataset. The best model (a stacked meta-learner) reaches AUROC 0.679, a small but statistically significant improvement attributable to evaluation-protocol-respecting refinement (stacking, wider tuning) rather than a new model family, consistent with an information-limited rather than model-limited ceiling near 0.68–0.70 for this dataset. We additionally show, as a direct, reproducible demonstration rather than a secondhand claim, how a single evaluation-protocol choice (oversampling before cross-validation) can manufacture a near-perfect-looking AUROC on real clinical tabular data, and we report — correcting our own earlier analysis — a statistically significant sex-based sensitivity gap that warrants human ethical review before any use of this or a similar model beyond the research setting it was built for.
+We built and rigorously evaluated several models for 30-day readmission prediction in diabetic inpatients, with particular attention to patient-level evaluation, honest uncertainty quantification, calibration, interpretability, and subgroup fairness — areas we found inconsistently handled across the comparable published literature on this exact dataset. The best model (CatBoost) reaches AUROC 0.677; a stacked meta-learner and a more extensively tuned CatBoost, tried after the midterm, did not produce a statistically significant improvement once evaluated on the correctly cleaned cohort, reinforcing rather than breaking an information-limited ceiling near 0.68–0.70 for this dataset. We additionally show, as a direct, reproducible demonstration rather than a secondhand claim, how a single evaluation-protocol choice (oversampling before cross-validation) can manufacture a near-perfect-looking AUROC on real clinical tabular data, and we report — correcting our own earlier analysis — a statistically significant sex-based sensitivity gap that warrants human ethical review before any use of this or a similar model beyond the research setting it was built for.
 
 ## Work Plan, Roles and Risks
 
@@ -123,12 +125,12 @@ Siham Khaldoun: data and modelling lead (data preparation, model development, ev
 
 ## CRediT Contribution Statement
 
-*(draft — each member must review and correct their own line; full draft also in `6_project_progress/statements.md`)*
+*(PROPOSED, not yet confirmed — `6_project_progress/statements.md` currently shows Larissa Chiu's and Magalie Achim's roles as "TBD," and the repository's commit history so far shows commits from Siham Khaldoun and Kayla Arab only. Larissa and Magalie must review, correct, and sign off on their own lines below, and should commit under their own accounts before submission, since commit history is part of the contribution-disclosure assessment. Do not submit this section unedited.)*
 
 **Kayla Arab:** Conceptualization, Investigation, Writing – original draft, Writing – review & editing.
-**Magalie Achim:** Investigation, Writing – original draft, Writing – review & editing.
+**Magalie Achim:** Investigation, Writing – original draft, Writing – review & editing. *(proposed — not yet confirmed by Magalie)*
 **Siham Khaldoun:** Data curation, Methodology, Software, Formal analysis, Validation, Writing – review & editing.
-**Larissa Chiu:** Investigation, Writing – review & editing.
+**Larissa Chiu:** Investigation, Writing – review & editing. *(proposed — not yet confirmed by Larissa)*
 
 ## Use of Generative AI Statement
 
@@ -138,9 +140,27 @@ The authors used ChatGPT (OpenAI) to assist with scientific writing, language ed
 
 ## References
 
-*(carried forward from the midterm report's 19-reference list, plus 3 new references needed for claims added in this manuscript: EmbPred30 [20], the ceiling-audit preprint [21], and Gupta & Choudhary [22]. Verify formatting and numbering once finalized; every reference must be confirmed read by a team member — track in `4_benchmarking/team_literature_log.md`.)*
+*([1]-[19] carried forward from the midterm report; full bibliographic detail (journal/venue, volume, pages, DOI) still needs to be pulled from the midterm's reference list and verified against each source, not just author/year as listed here. Plus 3 new references needed for claims added in this manuscript: EmbPred30 [20], the ceiling-audit preprint [21], and Gupta & Choudhary [22]. Every reference must be confirmed read by a team member before submission — track in `4_benchmarking/team_literature_log.md`; as of this draft, no reference has a confirmed human reader recorded there.)*
 
-[1]–[19]: as in the midterm report (`2_midterm_report/EXSU500 Team8 Midterm paper (final version).docx`) — American Diabetes Association 2026 Standards of Care; Rubin et al. 2022 DiaTOHC; Tan et al. 2025; Emi-Johnson & Nkrumah 2025; Liu, Sue & Wu 2024; Guo et al. 2025; Strack et al. 2014; Mishra, Tanniru & Sreedharan 2025; Salim & Ibrahim 2026; Afridi et al. 2026; Huang et al. 2022; Chen et al. 2022; Maisonnave et al. 2025; Steiner et al. 2026; Yau et al. 2024; TRIPOD+AI statement 2024; Saito & Rehmsmeier 2015; Lundberg & Lee 2017; Grinsztajn, Oyallon & Varoquaux 2022.
+[1] American Diabetes Association, "Standards of Care in Diabetes—2026," 2026.
+[2] A. Rubin et al., "DiaTOHC," 2022.
+[3] Tan et al., 2025.
+[4] E. Emi-Johnson and Nkrumah, 2025.
+[5] Liu, Sue, and Wu, 2024.
+[6] Guo et al., 2025.
+[7] B. Strack et al., "Impact of HbA1c Measurement on Hospital Readmission Rates," 2014.
+[8] Mishra, Tanniru, and Sreedharan, 2025.
+[9] Salim and Ibrahim, 2026.
+[10] Afridi et al., 2026.
+[11] Huang et al., 2022.
+[12] Chen et al., 2022.
+[13] Maisonnave et al., 2025.
+[14] Steiner et al., 2026.
+[15] Yau et al., 2024.
+[16] "TRIPOD+AI statement," 2024.
+[17] T. Saito and M. Rehmsmeier, "The Precision-Recall Plot Is More Informative than the ROC Plot," 2015.
+[18] S. Lundberg and S.-I. Lee, "A Unified Approach to Interpreting Model Predictions," 2017.
+[19] L. Grinsztajn, E. Oyallon, and G. Varoquaux, "Why Do Tree-Based Models Still Outperform Deep Learning on Tabular Data?," 2022.
 
 [20] Sarthak, S. Shukla, and S. Tripathi, "EmbPred30: Assessing 30-days Readmission for Diabetic Patients using Categorical Embeddings," arXiv:2002.11215, 2020.
 
