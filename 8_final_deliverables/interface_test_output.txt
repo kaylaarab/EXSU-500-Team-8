@@ -1,0 +1,17 @@
+============================= test session starts =============================
+platform win32 -- Python 3.11.9, pytest-9.2.0, pluggy-1.7.0 -- C:\Users\PC\AppData\Local\Programs\Python\Python311\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\PC\OneDrive - McGill University\Desktop\EXSU500 AI IN MEDICINE FUNDAMENTALS\Team Project\Diabetics Dataset
+plugins: anyio-4.12.1
+collecting ... collected 8 items
+
+7_interface/test_app.py::test_loads_without_exception PASSED             [ 12%]
+7_interface/test_app.py::test_disclaimer_shown PASSED                    [ 25%]
+7_interface/test_app.py::test_default_patient_scores PASSED              [ 37%]
+7_interface/test_app.py::test_lower_risk_example_runs PASSED             [ 50%]
+7_interface/test_app.py::test_higher_risk_example_runs PASSED            [ 62%]
+7_interface/test_app.py::test_died_or_hospice_is_not_scored PASSED       [ 75%]
+7_interface/test_app.py::test_race_selectbox_default_matches_config PASSED [ 87%]
+7_interface/test_app.py::test_all_models_table_present PASSED            [100%]
+
+============================= 8 passed in 10.60s ==============================

@@ -8,5 +8,6 @@
 | Repository (public release optional, +3%) | this repository | model card, licence (proposed), statements drafted |
 | Interface (optional, +2% if public) | `../7_interface/` | built, private, not deployed |
 | Peer evaluation | submitted separately by each student on myCourses | each member |
+| Automated tests (repo hygiene / robustness) | [`test_pipeline_integrity.py`](test_pipeline_integrity.py), results in [`test_results.md`](test_results.md) | **run 2026-11-10**, found a real local reproducibility drift — see results |
 
 **Known correction (2026-11-09):** the sex-sensitivity-gap finding changed from "not significant" (midterm report) to "significant" (final analysis) after a methodology error was found. See `manuscript_draft.md` Section V-F and `../2_midterm_report/material_for_final_report.md` for the full story. The midterm report itself could not be revised after submission.
