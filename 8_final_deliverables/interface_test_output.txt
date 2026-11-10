@@ -14,4 +14,4 @@ collecting ... collected 8 items
 7_interface/test_app.py::test_race_selectbox_default_matches_config PASSED [ 87%]
 7_interface/test_app.py::test_all_models_table_present PASSED            [100%]
 
-============================= 8 passed in 10.60s ==============================
+============================== 8 passed in 6.70s ==============================

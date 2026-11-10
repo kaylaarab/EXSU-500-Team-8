@@ -49,12 +49,7 @@ def test_no_patient_overlap_between_splits(splits):
 
 def test_split_sizes_match_model_card(splits):
     """Guards against someone silently re-running preprocessing with a
-    different random seed or exclusion rule and the model card going stale.
-
-    NOTE (2026-11-10): this currently FAILS on this machine's local
-    data/*.csv -- see 8_final_deliverables/test_results.md for why and what
-    to do about it before the Dec 11 submission. Left failing on purpose
-    instead of loosened, so it keeps flagging the problem."""
+    different random seed or exclusion rule and the model card going stale."""
     train, val, test = splits
     assert len(train) == pytest.approx(69519, abs=5)
     assert len(val) == pytest.approx(14911, abs=5)
@@ -63,12 +58,7 @@ def test_split_sizes_match_model_card(splits):
 
 def test_death_hospice_excluded(splits):
     """Death/hospice discharges can't be readmitted and must be excluded
-    from every split, per the project's settled decisions (scripts/01_preprocess.py).
-
-    NOTE (2026-11-10): this currently FAILS on this machine's local
-    data/*.csv -- see 8_final_deliverables/test_results.md: these files
-    hold all 101,766 raw encounters, i.e. they were not produced by the
-    current 01_preprocess.py (or are stale). Left failing on purpose."""
+    from every split, per the project's settled decisions (scripts/01_preprocess.py)."""
     train, val, test = splits
     for name, df in [("train", train), ("val", val), ("test", test)]:
         if "discharge_disposition_id" in df.columns:
@@ -100,10 +90,10 @@ def test_model_loads(demo_model):
 
 def _synthetic_row(config, overrides=None):
     """Build one input row the way 7_interface/app.py does: config['defaults']
-    for every declared feature, with optional field overrides. This is
-    schema-independent of data/*.csv, which turned out (see
-    test_local_data_schema_matches_deployed_model below) to no longer match
-    what the deployed model expects."""
+    for every declared feature, with optional field overrides. Kept
+    schema-independent of data/*.csv on purpose -- see
+    test_local_data_schema_matches_deployed_model below, which checks that
+    independence assumption directly."""
     row = dict(config["defaults"])
     if overrides:
         row.update(overrides)
@@ -133,12 +123,8 @@ def test_model_output_responds_to_known_risk_factors(demo_model):
 
 def test_local_data_schema_matches_deployed_model(splits, demo_model):
     """Flags schema drift between data/*.csv on this machine and the
-    feature set the committed model (7_interface/model/) actually expects.
-
-    NOTE (2026-11-10): this currently FAILS -- data/*.csv is missing
-    payer_code and medical_specialty, which the deployed model was trained
-    on and still expects. See 8_final_deliverables/test_results.md. Left
-    failing on purpose so this doesn't silently regress further."""
+    feature set the committed model (7_interface/model/) actually expects
+    (caught a real drift once -- see 8_final_deliverables/test_results.md)."""
     _, _, test = splits
     model, config = demo_model
     missing = [c for c in config["features"] if c not in test.columns]

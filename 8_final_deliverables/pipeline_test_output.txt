@@ -7,93 +7,12 @@ collecting ... collected 9 items
 
 8_final_deliverables/test_pipeline_integrity.py::test_splits_exist_and_are_nonempty PASSED [ 11%]
 8_final_deliverables/test_pipeline_integrity.py::test_no_patient_overlap_between_splits PASSED [ 22%]
-8_final_deliverables/test_pipeline_integrity.py::test_split_sizes_match_model_card FAILED [ 33%]
-8_final_deliverables/test_pipeline_integrity.py::test_death_hospice_excluded FAILED [ 44%]
+8_final_deliverables/test_pipeline_integrity.py::test_split_sizes_match_model_card PASSED [ 33%]
+8_final_deliverables/test_pipeline_integrity.py::test_death_hospice_excluded PASSED [ 44%]
 8_final_deliverables/test_pipeline_integrity.py::test_target_is_binary PASSED [ 55%]
 8_final_deliverables/test_pipeline_integrity.py::test_model_loads PASSED [ 66%]
 8_final_deliverables/test_pipeline_integrity.py::test_model_predicts_in_valid_range PASSED [ 77%]
 8_final_deliverables/test_pipeline_integrity.py::test_model_output_responds_to_known_risk_factors PASSED [ 88%]
-8_final_deliverables/test_pipeline_integrity.py::test_local_data_schema_matches_deployed_model FAILED [100%]
+8_final_deliverables/test_pipeline_integrity.py::test_local_data_schema_matches_deployed_model PASSED [100%]
 
-================================== FAILURES ===================================
-______________________ test_split_sizes_match_model_card ______________________
-
-splits = (       patient_nbr             race  ... num_med_changes a1c_measured_and_changed
-0          8222157        Caucasian...        1
-15218    175429310        Caucasian  ...               0                        0
-
-[15219 rows x 49 columns])
-
-    def test_split_sizes_match_model_card(splits):
-        """Guards against someone silently re-running preprocessing with a
-        different random seed or exclusion rule and the model card going stale.
-    
-        NOTE (2026-11-10): this currently FAILS on this machine's local
-        data/*.csv -- see 8_final_deliverables/test_results.md for why and what
-        to do about it before the Dec 11 submission. Left failing on purpose
-        instead of loosened, so it keeps flagging the problem."""
-        train, val, test = splits
->       assert len(train) == pytest.approx(69519, abs=5)
-E       assert 71520 == 69519 ± 5
-E         
-E         comparison failed
-E         Obtained: 71520
-E         Expected: 69519 ± 5
-
-8_final_deliverables\test_pipeline_integrity.py:59: AssertionError
-_________________________ test_death_hospice_excluded _________________________
-
-splits = (       patient_nbr             race  ... num_med_changes a1c_measured_and_changed
-0          8222157        Caucasian...        1
-15218    175429310        Caucasian  ...               0                        0
-
-[15219 rows x 49 columns])
-
-    def test_death_hospice_excluded(splits):
-        """Death/hospice discharges can't be readmitted and must be excluded
-        from every split, per the project's settled decisions (scripts/01_preprocess.py).
-    
-        NOTE (2026-11-10): this currently FAILS on this machine's local
-        data/*.csv -- see 8_final_deliverables/test_results.md: these files
-        hold all 101,766 raw encounters, i.e. they were not produced by the
-        current 01_preprocess.py (or are stale). Left failing on purpose."""
-        train, val, test = splits
-        for name, df in [("train", train), ("val", val), ("test", test)]:
-            if "discharge_disposition_id" in df.columns:
-                death_hospice_ids = {11, 13, 14, 19, 20, 21}
-                present = set(df["discharge_disposition_id"].unique()) & death_hospice_ids
->               assert not present, f"{name} split still contains death/hospice discharge ids {present}"
-E               AssertionError: train split still contains death/hospice discharge ids {11, 13, 14, 19, 20}
-E               assert not {11, 13, 14, 19, 20}
-
-8_final_deliverables\test_pipeline_integrity.py:77: AssertionError
-________________ test_local_data_schema_matches_deployed_model ________________
-
-splits = (       patient_nbr             race  ... num_med_changes a1c_measured_and_changed
-0          8222157        Caucasian...        1
-15218    175429310        Caucasian  ...               0                        0
-
-[15219 rows x 49 columns])
-demo_model = (CatBoostClassifier(class_weights=[1, 7.782086913], depth=4, eval_metric='AUC', iterations=1000, learning_rate=0.1, lo..., 'admission_type_2', 'admission_type_3', 'admission_type_4', 'admission_type_5', 'admission_type_6', ...], ...}, ...})
-
-    def test_local_data_schema_matches_deployed_model(splits, demo_model):
-        """Flags schema drift between data/*.csv on this machine and the
-        feature set the committed model (7_interface/model/) actually expects.
-    
-        NOTE (2026-11-10): this currently FAILS -- data/*.csv is missing
-        payer_code and medical_specialty, which the deployed model was trained
-        on and still expects. See 8_final_deliverables/test_results.md. Left
-        failing on purpose so this doesn't silently regress further."""
-        _, _, test = splits
-        model, config = demo_model
-        missing = [c for c in config["features"] if c not in test.columns]
->       assert not missing, f"data/test.csv is missing model features: {missing}"
-E       AssertionError: data/test.csv is missing model features: ['payer_code', 'medical_specialty']
-E       assert not ['payer_code', 'medical_specialty']
-
-8_final_deliverables\test_pipeline_integrity.py:145: AssertionError
-=========================== short test summary info ===========================
-FAILED 8_final_deliverables/test_pipeline_integrity.py::test_split_sizes_match_model_card
-FAILED 8_final_deliverables/test_pipeline_integrity.py::test_death_hospice_excluded
-FAILED 8_final_deliverables/test_pipeline_integrity.py::test_local_data_schema_matches_deployed_model
-========================= 3 failed, 6 passed in 2.23s =========================
+============================== 9 passed in 1.93s ==============================
