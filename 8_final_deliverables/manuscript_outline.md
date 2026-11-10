@@ -23,8 +23,8 @@ Required structure (spec section 7.1): title and authors; abstract (max 250 word
 | References | 15+ (the final list should be 20-30), all read | **not started by humans** |
 
 ## Open scientific items before the manuscript
-1. One final model-comparison table with patient-level confidence intervals for every model (several rows currently use encounter-level or single-run intervals).
+1. ~~One final model-comparison table with patient-level CIs~~ done (Scripts 21, 22): see `../5_results/model_variations_log.md` stages 4 and 8. Current best: a true stacked meta-learner / wider-search CatBoost, AUROC 0.679 (patient-level CI 0.663-0.695), a small but statistically significant gain over the single-CatBoost baseline (0.674).
 2. Decide whether patient-history features join the headline model (relies on unverifiable encounter ordering).
-3. ~~Sex gap~~ investigated (Script 20); remaining: intersectional checks and ethical framing of sex-specific thresholds.
+3. **Sex gap: corrected 2026-11-09, use this version, not the midterm report's.** The midterm report says the sex-sensitivity gap is not significant; that was based on a non-protocol-compliant analysis (Script 07: row-level bootstrap, arbitrary threshold, non-deployed model). The protocol-compliant analysis (Script 18: patient-level bootstrap, the deployed calibrated model, its real operating threshold) finds the gap IS significant (female sensitivity 0.622 [0.580,0.662] vs. male 0.519 [0.476,0.555]). See `../2_midterm_report/material_for_final_report.md` for the full correction and suggested manuscript sentence. Remaining: intersectional checks and ethical framing of the sex-specific-threshold mitigation (Script 20).
 4. ~~Learning curve~~ done (Script 19): the ceiling is soft, +0.005 per doubling for trees; present it as a limitation, not a proven hard cap.
 5. A clean-clone reproducibility run.

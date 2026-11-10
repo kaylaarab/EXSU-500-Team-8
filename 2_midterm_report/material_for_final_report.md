@@ -31,39 +31,50 @@ artifact, variability quantified, repo statements).
    from model choice.
 4. Calibrated probabilities are reliable (Brier score 0.094, expected
    calibration error 0.007).
-5. **Sensitivity-by-sex subgroup analysis (resolved, see below).**
+5. **Sensitivity-by-sex subgroup analysis — corrected 2026-11-09, see below.
+   The midterm report's claim (not significant) was based on a weaker
+   analysis and should NOT be reused in the final manuscript.**
 
-## Sensitivity by sex — full analysis
+## Sensitivity by sex — corrected analysis (supersedes the midterm claim)
 
-Ran on the test set (8,268 female / 6,949 male / 2 unknown-invalid rows),
-1000 bootstrap resamples per subgroup. Full numbers in
-`5_results/fairness/sensitivity_by_sex.csv`, script in
-`scripts/07_sensitivity_by_sex.py`.
+**Correction (2026-11-09):** the midterm report states this gap is "not
+statistically significant," based on `scripts/07_sensitivity_by_sex.py`.
+That script does not follow the evaluation protocol stated in the midterm
+report itself (patient-level bootstrap resampling): it bootstraps
+individual test *rows* rather than patients, uses a fixed 0.5 threshold on
+raw (uncalibrated) model scores rather than the model's actual operating
+threshold, and retrains fresh models rather than using the calibrated
+model shipped in `7_interface/model/`. The repo's protocol-compliant
+analysis — `scripts/18_calibration_subgroups.py`, patient-level bootstrap
+(500 resamples grouped by `patient_nbr`), on the deployed calibrated
+CatBoost model, at its real operating threshold (11.6%) — gives a
+different, authoritative answer, already saved in
+`5_results/evaluation/subgroup_performance.csv` and correctly reflected in
+`MODEL_CARD.md`:
 
-| Model | Female Sens. (95% CI) | Male Sens. (95% CI) | Gap (F-M) |
+| Group | n | Sensitivity | 95% CI (patient-level) |
 |---|---|---|---|
-| Logistic Regression | 0.540 [0.508, 0.572] | 0.492 [0.457, 0.528] | +0.048 |
-| XGBoost | 0.603 [0.572, 0.637] | 0.566 [0.529, 0.601] | +0.038 |
-| CatBoost | 0.600 [0.568, 0.632] | 0.555 [0.519, 0.589] | +0.046 |
-| Ensemble | 0.603 [0.572, 0.635] | 0.555 [0.517, 0.589] | +0.049 |
+| Female | 8,079 | 0.622 | [0.580, 0.662] |
+| Male | 6,834 | 0.519 | [0.476, 0.555] |
 
-**Conclusion:** Sensitivity differs by sex across all four models (female
-higher than male by 0.04-0.05), but 95% CIs overlap in every case, so the
-gap is not statistically significant at current sample sizes (732-948
-positive cases per subgroup). The consistent direction across model
-families is worth monitoring if the model is revisited, but does not
-support a claim of differential performance by sex at this stage.
-Specificity runs the opposite direction (~0.65 female vs. ~0.69 male,
-smaller margin) in every model.
+**Conclusion: the CIs do not overlap — the gap IS statistically
+significant** for the deployed model at its real operating threshold.
+AUROC also differs: 0.694 (female) vs. 0.658 (male). This reverses the
+midterm report's conclusion; `scripts/07_sensitivity_by_sex.py` should be
+treated as superseded, not as a second valid estimate.
 
 Suggested sentence for the final manuscript's Limitations/Fairness section:
-> "Sensitivity differed by sex across all four models (female higher than
-> male by 0.04-0.05), but 95% bootstrap confidence intervals for each
-> subgroup overlap in every case, so this difference is not statistically
-> significant at current sample sizes (n ≈ 7-8k per subgroup, 732-948
-> positive cases). The consistent direction across model families warrants
-> monitoring if the dataset or model is revisited, but does not support a
-> claim of differential model performance by sex at this stage."
+> "At the model's operating threshold, sensitivity for predicting 30-day
+> readmission was higher for women than men (0.622 [0.580, 0.662] vs.
+> 0.519 [0.476, 0.555], patient-level bootstrap 95% CIs, non-overlapping),
+> and AUROC was correspondingly higher for women (0.694 vs. 0.658). The
+> model does not use sex as an input, so the gap likely reflects
+> differences in how the available features associate with readmission by
+> sex. A preliminary check of sex-specific thresholds (`scripts/
+> 20_sex_gap.py`) narrows the sensitivity gap at a small cost in overall
+> accuracy; whether to adopt sex-specific thresholds, and the fairness
+> framework for doing so, is flagged for human/ethical review before any
+> deployment, not resolved by this analysis."
 
 ## Fuller Risks paragraph (midterm version was trimmed)
 

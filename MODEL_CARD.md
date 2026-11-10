@@ -1,7 +1,9 @@
 # Model card: 30-day readmission risk for diabetic inpatients
 
 **Status:** research prototype for EXSU 500 (Fall 2026, Team 8). **Not a medical device. Not for clinical use.**
-**Last updated:** 2026-10-25 · Code: this repository · Licence: MIT (code); dataset CC BY 4.0, not included.
+**Last updated:** 2026-11-09 · Code: this repository · Licence: MIT (code); dataset CC BY 4.0, not included.
+
+**Note:** this card describes the model actually deployed in `7_interface/` (CatBoost, AUROC 0.677). A stacked meta-learner / wider-tuned CatBoost reaches AUROC 0.679 (a small, statistically significant gain) but has not been deployed to the interface; see `5_results/model_variations_log.md` stage 8 for the full comparison.
 
 ## Model
 - **Task:** binary classification: will a diabetic inpatient be readmitted to hospital within 30 days of discharge, using information known at discharge.

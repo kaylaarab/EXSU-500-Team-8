@@ -1,6 +1,19 @@
 """
 Sensitivity (and specificity) by sex/gender subgroup, for every main model.
 
+SUPERSEDED (2026-11-09): this script does not follow the evaluation
+protocol's patient-level bootstrap (it resamples individual rows, so
+patients with multiple stays are double-counted), uses an arbitrary 0.5
+threshold on raw/uncalibrated scores rather than any model's real operating
+threshold, and uses freshly-retrained models rather than the deployed one.
+It found the sex-sensitivity gap "not significant," which contradicts the
+protocol-compliant analysis in scripts/18_calibration_subgroups.py
+(patient-level bootstrap, the deployed calibrated model, its real 11.6%
+operating threshold -> 5_results/evaluation/subgroup_performance.csv),
+which finds the gap IS significant. See
+2_midterm_report/material_for_final_report.md for the correction. Kept for
+history; do not cite this script's output.
+
 Trains each model exactly as in scripts/0X_*.py (same hyperparameters), then
 breaks test-set performance out by `gender` (Female / Male; 'Unknown/Invalid'
 has only 2 rows in test so it's reported but not bootstrapped).
