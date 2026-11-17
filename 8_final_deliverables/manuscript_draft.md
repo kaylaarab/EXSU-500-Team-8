@@ -1,6 +1,6 @@
 # Manuscript draft (6-8 pages IEEE two-column; due Fri 11 Dec 2026)
 
-**Status: DRAFT, 2026-11-09.** Built from the midterm report plus everything unlocked since (final results table with patient-level CIs, the corrected sex-gap finding, calibration/interpretability artifacts, the benchmarking comparison). Numbers are sourced from `5_results/`, `MODEL_CARD.md` and `4_benchmarking/benchmarking_report.md` as of this date — **refresh before submission if any script is rerun.** Items still needing a human: confirm every reference has been read (`4_benchmarking/team_literature_log.md`), insert the three required figures (calibration/decision curve, SHAP summary, model-comparison bar chart — all already generated in `5_results/evaluation/` and `5_results/main_models/`), each member reviews their own CRediT line, word-count/page check once converted to the IEEE Word template, and the abstract should be the last thing re-read since it's written from the rest.
+**Status: DRAFT, numbers corrected and verified 2026-11-16.** The IEEE two-column `.docx` build with all 3 figures embedded is done: [`Manuscript_Draft.docx`](Manuscript_Draft.docx), 6 pages (within the 6-8 page target), rendered and visually checked. Items still needing a human: confirm every reference has been read (`4_benchmarking/team_literature_log.md`), each of Larissa and Magalie reviews and confirms their own CRediT line (currently marked proposed/unconfirmed), GenAI statement sign-off. **If any script in `scripts/` is rerun before submission, refresh the numbers here and rebuild the docx.**
 
 ---
 
@@ -140,27 +140,27 @@ The authors used ChatGPT (OpenAI) to assist with scientific writing, language ed
 
 ## References
 
-*([1]-[19] carried forward from the midterm report; full bibliographic detail (journal/venue, volume, pages, DOI) still needs to be pulled from the midterm's reference list and verified against each source, not just author/year as listed here. Plus 3 new references needed for claims added in this manuscript: EmbPred30 [20], the ceiling-audit preprint [21], and Gupta & Choudhary [22]. Every reference must be confirmed read by a team member before submission — track in `4_benchmarking/team_literature_log.md`; as of this draft, no reference has a confirmed human reader recorded there.)*
+*(Every reference must be confirmed read by a team member before submission — track in `4_benchmarking/team_literature_log.md`; as of this draft, no reference has a confirmed human reader recorded there.)*
 
-[1] American Diabetes Association, "Standards of Care in Diabetes—2026," 2026.
-[2] A. Rubin et al., "DiaTOHC," 2022.
-[3] Tan et al., 2025.
-[4] E. Emi-Johnson and Nkrumah, 2025.
-[5] Liu, Sue, and Wu, 2024.
-[6] Guo et al., 2025.
-[7] B. Strack et al., "Impact of HbA1c Measurement on Hospital Readmission Rates," 2014.
-[8] Mishra, Tanniru, and Sreedharan, 2025.
-[9] Salim and Ibrahim, 2026.
-[10] Afridi et al., 2026.
-[11] Huang et al., 2022.
-[12] Chen et al., 2022.
-[13] Maisonnave et al., 2025.
-[14] Steiner et al., 2026.
-[15] Yau et al., 2024.
-[16] "TRIPOD+AI statement," 2024.
-[17] T. Saito and M. Rehmsmeier, "The Precision-Recall Plot Is More Informative than the ROC Plot," 2015.
-[18] S. Lundberg and S.-I. Lee, "A Unified Approach to Interpreting Model Predictions," 2017.
-[19] L. Grinsztajn, E. Oyallon, and G. Varoquaux, "Why Do Tree-Based Models Still Outperform Deep Learning on Tabular Data?," 2022.
+[1] American Diabetes Association Professional Practice Committee, "16. Diabetes Care in the Hospital: Standards of Care in Diabetes–2026," *Diabetes Care*, vol. 49, no. Supplement_1, pp. S339–S355, 2025.
+[2] D. J. Rubin et al., "The Diabetes Transition of Hospital Care (DiaTOHC) Pilot Study: A Randomized Controlled Trial of an Intervention Designed to Reduce Readmission Risk of Adults with Diabetes," *Journal of Clinical Medicine*, vol. 11, no. 6, p. 1471, 2022.
+[3] J. Tan et al., "Derivation and Validation of Prediction Models for Prolonged Length of Stay and 30-Day Readmission in Elderly Patients With Type 2 Diabetes Mellitus: A Multicenter Study," *J Diabetes Res*, vol. 2025, p. 3148242, 2025.
+[4] O. G. Emi-Johnson and K. J. Nkrumah, "Predicting 30-Day Hospital Readmission in Patients With Diabetes Using Machine Learning on Electronic Health Record Data," *Cureus*, vol. 17, no. 4, p. e82437, Apr. 2025.
+[5] V. B. Liu, L. Y. Sue, and Y. Wu, "Comparison of machine learning models for predicting 30-day readmission rates for patients with diabetes," *Journal of Medical Artificial Intelligence*, vol. 7, 2024.
+[6] C. Guo, H. Zhou, I. M. Pires, P. J. Coelho, R. Tong, and F. Farid, "Towards an explainable machine learning model to reduce readmission risks for diabetes patients," *Informatics in Medicine Unlocked*, vol. 58, p. 101686, 2025.
+[7] B. Strack et al., "Impact of HbA1c measurement on hospital readmission rates: analysis of 70,000 clinical database patient records," *Biomed Res Int*, vol. 2014, p. 781670, 2014.
+[8] V. Mishra, M. R. Tanniru, and J. Sreedharan, "Prediction of 30-day readmission in diabetes management using Machine learning," *Computers in Biology and Medicine*, vol. 195, p. 110616, 2025.
+[9] S. S. Salim and A. A. Ibrahim, "A Machine Learning Approach for Predicting 30-Day Hospital Readmission in Patients with Diabetes," *Healthcare*, vol. 14, no. 9, p. 1185, 2026.
+[10] A. A. Afridi, M. Usman, D. J. Rubin, and M. R. R. Rana, "A Robust and Explainable Framework for Predicting Hospital Readmission in Patients with Diabetes," *Diabetology*, vol. 7, no. 10, p. 197, 2026.
+[11] Y. Huang, A. Talwar, Y. Lin, and R. R. Aparasu, "Machine learning methods to predict 30-day hospital readmission outcome among US adults with pneumonia: analysis of the national readmission database," *BMC Medical Informatics and Decision Making*, vol. 22, no. 1, p. 288, 2022.
+[12] K. A. Chen et al., "Development and Validation of Machine Learning Models to Predict Readmission After Colorectal Surgery," *Journal of Gastrointestinal Surgery*, vol. 26, no. 11, pp. 2342–2350, 2022.
+[13] M. Maisonnave, E. Rajabi, M. Taghavi, and P. VanBerkel, "Explainable machine learning to identify risk factors for unplanned hospital readmissions in Nova Scotian hospitals," *Computers in Biology and Medicine*, vol. 190, p. 110024, 2025.
+[14] L. M. Steiner, S. M. G. Zwakhalen, L. Bonetti, and S. Hahn, "Development and internal validation of a 30-day readmission risk model for older adults using Swiss electronic health record data: a retrospective cohort study," *BMC Geriatrics*, vol. 26, no. 1, p. 846, 2026.
+[15] F. F. Yau et al., "Machine learning-based prediction of coronary care unit readmission: A multihospital validation study," *Digit Health*, vol. 10, p. 20552076241277030, 2024.
+[16] "TRIPOD+AI statement: updated guidance for reporting clinical prediction models that use regression or machine learning methods," *BMJ*, vol. 385, p. q902, 2024.
+[17] T. Saito and M. Rehmsmeier, "The precision-recall plot is more informative than the ROC plot when evaluating binary classifiers on imbalanced datasets," *PLoS One*, vol. 10, no. 3, p. e0118432, 2015.
+[18] S. Lundberg and S.-I. Lee, "A Unified Approach to Interpreting Model Predictions," *NeurIPS*, 2017.
+[19] L. Grinsztajn, E. Oyallon, and G. Varoquaux, "Why do tree-based models still outperform deep learning on typical tabular data?," *NeurIPS*, 2022.
 
 [20] Sarthak, S. Shukla, and S. Tripathi, "EmbPred30: Assessing 30-days Readmission for Diabetic Patients using Categorical Embeddings," arXiv:2002.11215, 2020.
 

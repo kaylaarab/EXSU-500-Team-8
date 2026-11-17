@@ -2,7 +2,7 @@
 
 | Item | File | Status |
 |---|---|---|
-| Manuscript (6-8 pages, IEEE) | [`manuscript_draft.md`](manuscript_draft.md) | all required sections drafted, **not yet final**: needs figures inserted, references read + reformatted to numbered IEEE entries, CRediT lines confirmed by Larissa and Magalie (currently proposed, not theirs), GenAI statement signed off, 6-8 page/abstract-250-word check once in the IEEE template |
+| Manuscript (6-8 pages, IEEE) | [`manuscript_draft.md`](manuscript_draft.md) source; [`Manuscript_Draft.docx`](Manuscript_Draft.docx) IEEE two-column build with the 3 figures embedded, 6 pages | **not yet final**: references still need a confirmed human reader each (`4_benchmarking/team_literature_log.md`), CRediT lines confirmed by Larissa and Magalie (currently proposed, not theirs), GenAI statement signed off |
 | — outline it was built from | [`manuscript_outline.md`](manuscript_outline.md) | mapping to repo material, kept for reference |
 | 7-minute recorded presentation | [`presentation_script_draft.md`](presentation_script_draft.md) | draft script with timings, still as of 2026-10-25 — **numbers not yet refreshed**, speaker assignments still placeholders |
 | Repository (public release optional, +3%) | this repository | model card done; licence **proposed, not yet formally confirmed by the team**; statements drafted, pending member sign-off |
