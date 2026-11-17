@@ -2,6 +2,10 @@
 
 Newest first. One entry per significant piece of work, added when it is finished. The current summary, to-dos and key dates are in [`PROJECT_STATUS.md`](PROJECT_STATUS.md).
 
+## 2026-11-17 (2)
+
+- **Presentation materials moved into their own subfolder** (`8_final_deliverables/presentation/`): `presentation_script_draft.md` plus a new `slide_deck_notes.md` pointing to the built 10-slide deck (Claude Artifact link, slide-by-slide content table, figures list). Verified every number on the deck against the current repo (CatBoost 0.677, XGBoost 0.673, sex-gap 62%/52%) — no corrections needed, the deck was already built from the corrected figures. Updated `8_final_deliverables/README.md`'s presentation row to point at the new folder.
+
 ## 2026-11-17
 
 - **Reference-reading confirmation: done for all references.** Closes the biggest open item flagged since the midterm stage (`4_benchmarking/team_literature_log.md`, `PROJECT_STATUS.md`). Removed the corresponding "needs human reading" flags from `manuscript_draft.md`, `manuscript_outline.md`, and `8_final_deliverables/README.md`.
