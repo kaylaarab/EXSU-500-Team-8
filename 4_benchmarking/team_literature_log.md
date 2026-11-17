@@ -1,3 +1,5 @@
+**Status (2026-11-17): reference-reading confirmed done for all references** by the team ahead of the final manuscript submission. See `6_project_progress/progress_log.md` (2026-11-17) for the record of this confirmation.
+
 # Literature benchmarks — Kayla & Magalie's research log
 
 Add your findings here (separate from `LITERATURE_BENCHMARKS.md`, which has

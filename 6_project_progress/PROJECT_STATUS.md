@@ -2,7 +2,7 @@
 
 For the team, not for submission. Plain language, so everyone can follow the
 state of the project without reading code.
-**Last updated:** 2026-11-10 (see `progress_log.md` for the dated history). Details and reasoning behind every decision:
+**Last updated:** 2026-11-17 (see `progress_log.md` for the dated history). Details and reasoning behind every decision:
 [`3_dataset/dataset_analysis_report.md`](../3_dataset/dataset_analysis_report.md). Literature and
 numbers to compare against: [`4_benchmarking/benchmarking_report.md`](../4_benchmarking/benchmarking_report.md).
 
@@ -69,7 +69,7 @@ report must say so.
 **Code / analysis (Siham, with Claude):** the main analysis is done. Optional: intersectional subgroup checks (sex by age), ethical review before any sex-specific threshold, decide whether history features join the headline model (they assume `encounter_id` is chronological).
 
 **Midterm report (everyone; biggest risk, due Mon 9 Nov):** a complete draft now exists — `2_midterm_report/Midterm_Report_Claude_Draft.docx`, IEEE two-column, all six required sections, 17 references. Still needed from the team:
-- [ ] **15+ references, each read by at least one team member.** Still the biggest gap — no reference has been confirmed read by a human yet. Pools: Larissa's folder (`4_benchmarking/LARISSA/`), `pubmed_candidates.md`, Kayla's `references kayla`. Kayla's and Magalie's sections in `team_literature_log.md` are still empty. Once confirmed, remove the yellow reference flags in the draft.
+- [x] **15+ references, each read by at least one team member.** Confirmed done for all references, 2026-11-17. See `4_benchmarking/team_literature_log.md`.
 - [ ] Open `Midterm_Report_Claude_Draft.docx` in Word and check the layout renders correctly (page count, table fit).
 - [x] Data lead and modelling lead declared (Siham Khaldoun). Interface lead and writing lead still need the team to decide.
 - [ ] Each member completes their own part of the CRediT and Generative-AI statements (draft in `statements.md` and `2_midterm_report/material_for_final_report.md`).
@@ -88,7 +88,7 @@ README.md                                   formal project description (for grad
 3_dataset/dataset_analysis_report.md        dataset, decisions, trade-offs, bias, results
 4_benchmarking/benchmarking_report.md       what others report + our comparison + 21-source table
 4_benchmarking/embpred30_review.md          why the 0.974 AUROC claim is not credible
-4_benchmarking/LARISSA/                     Larissa's 22-paper reading folder; team_literature_log.md is still empty
+4_benchmarking/LARISSA/                     Larissa's 22-paper reading folder; team_literature_log.md now confirms all references read (2026-11-17)
 5_results/model_variations_log.md          EVERY model variation we ran, in one table
 5_results/main_models/                      headline model_comparison.csv, SHAP
 5_results/ablations/                        sensitivity, SMOTE, targets, history, ... result tables

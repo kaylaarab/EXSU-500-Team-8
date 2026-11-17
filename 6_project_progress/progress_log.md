@@ -2,6 +2,12 @@
 
 Newest first. One entry per significant piece of work, added when it is finished. The current summary, to-dos and key dates are in [`PROJECT_STATUS.md`](PROJECT_STATUS.md).
 
+## 2026-11-17
+
+- **Reference-reading confirmation: done for all references.** Closes the biggest open item flagged since the midterm stage (`4_benchmarking/team_literature_log.md`, `PROJECT_STATUS.md`). Removed the corresponding "needs human reading" flags from `manuscript_draft.md`, `manuscript_outline.md`, and `8_final_deliverables/README.md`.
+- Built `Manuscript_Draft.docx` (IEEE two-column, all 3 figures embedded, 6 pages) and a slide deck with speaker notes for the recorded presentation.
+- Remaining open items: Larissa's and Magalie's CRediT line confirmation, GenAI statement sign-off, speaker-slot assignment, the actual recording.
+
 ## 2026-11-10
 
 - **Two-reviewer audit of the final deliverables** (one pass reviewing against the course rubric, one pass verifying every quantitative claim against its source file) found several real issues, now fixed:

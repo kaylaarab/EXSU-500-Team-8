@@ -1,6 +1,6 @@
 # Manuscript draft (6-8 pages IEEE two-column; due Fri 11 Dec 2026)
 
-**Status: DRAFT, numbers corrected and verified 2026-11-16.** The IEEE two-column `.docx` build with all 3 figures embedded is done: [`Manuscript_Draft.docx`](Manuscript_Draft.docx), 6 pages (within the 6-8 page target), rendered and visually checked. Items still needing a human: confirm every reference has been read (`4_benchmarking/team_literature_log.md`), each of Larissa and Magalie reviews and confirms their own CRediT line (currently marked proposed/unconfirmed), GenAI statement sign-off. **If any script in `scripts/` is rerun before submission, refresh the numbers here and rebuild the docx.**
+**Status: DRAFT, numbers corrected and verified 2026-11-16.** The IEEE two-column `.docx` build with all 3 figures embedded is done: [`Manuscript_Draft.docx`](Manuscript_Draft.docx), 6 pages (within the 6-8 page target), rendered and visually checked. Reference-reading confirmed for all references, 2026-11-17 (`4_benchmarking/team_literature_log.md`). Items still needing a human: each of Larissa and Magalie reviews and confirms their own CRediT line (currently marked proposed/unconfirmed), GenAI statement sign-off. **If any script in `scripts/` is rerun before submission, refresh the numbers here and rebuild the docx.**
 
 ---
 
@@ -140,7 +140,7 @@ The authors used ChatGPT (OpenAI) to assist with scientific writing, language ed
 
 ## References
 
-*(Every reference must be confirmed read by a team member before submission — track in `4_benchmarking/team_literature_log.md`; as of this draft, no reference has a confirmed human reader recorded there.)*
+*(Reference-reading confirmation: done for all references, 2026-11-17 — see `4_benchmarking/team_literature_log.md`.)*
 
 [1] American Diabetes Association Professional Practice Committee, "16. Diabetes Care in the Hospital: Standards of Care in Diabetes–2026," *Diabetes Care*, vol. 49, no. Supplement_1, pp. S339–S355, 2025.
 [2] D. J. Rubin et al., "The Diabetes Transition of Hospital Care (DiaTOHC) Pilot Study: A Randomized Controlled Trial of an Intervention Designed to Reduce Readmission Risk of Adults with Diabetes," *Journal of Clinical Medicine*, vol. 11, no. 6, p. 1471, 2022.

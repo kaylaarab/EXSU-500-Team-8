@@ -8,7 +8,7 @@ Required structure (spec section 7.1): title and authors; abstract (max 250 word
 |---|---|---|
 | Abstract | write last from results | not started |
 | Introduction, motivation | midterm draft section I | draft |
-| Related work | midterm draft II; `../4_benchmarking/benchmarking_report.md`; EmbPred30 review | draft; references need human reading |
+| Related work | midterm draft II; `../4_benchmarking/benchmarking_report.md`; EmbPred30 review | draft; references confirmed read by the team, 2026-11-17 |
 | Data | `../3_dataset/dataset_analysis_report.md` sections 1-2 | draft |
 | Methods: cohort, splits, features | dataset report section 3-4; `../scripts/01_preprocess.py` | draft |
 | Methods: models, tuning, calibration | `../5_results/model_variations_log.md` (hyperparameter table); `../MODEL_CARD.md` | draft |
